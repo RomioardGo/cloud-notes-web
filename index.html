@@ -1,32 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cloud Notes</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Notes</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
+<script type="module" src="app.js"></script>
 </head>
 <body>
 
-    <h1>Cloud Notes ☁️</h1>
+<h1>Cloud Notes ☁️</h1>
 
-    <div id="auth-section">
-        <h2>Login / Register</h2>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="register()">Register</button>
-        <button onclick="login()">Login</button>
-        <button onclick="logout()">Logout</button>
-    </div>
+<!-- Authentication Section -->
+<div id="auth-section">
+    <h2>Login / Register</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="register()">Register</button>
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
+</div>
 
-    <div id="notes-section" style="display:none;">
-        <h2>Create Note</h2>
-        <input type="text" id="title" placeholder="Title">
-        <textarea id="content" placeholder="Content"></textarea>
-        <button onclick="addNote()">Add Note</button>
+<!-- Notes Section -->
+<div id="notes-section" style="display:none;">
+    <h2>Create Note</h2>
+    <input type="text" id="note-title" placeholder="Title">
+    <textarea id="note-content" placeholder="Content"></textarea>
+    <button id="add-note">Add Note</button>
 
-        <h2>Your Notes</h2>
-        <div id="notes-list"></div>
-    </div>
+    <h2>Your Notes</h2>
+    <div id="notes-list"></div>
+</div>
 
-    <script type="module" src="app.js"></script>
 </body>
 </html>
