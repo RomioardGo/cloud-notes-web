@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloud Notes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Cloud Notes ☁️</h1>
+
+    <div id="auth-section">
+        <h2>Login / Register</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="register()">Register</button>
+        <button onclick="login()">Login</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <div id="notes-section" style="display:none;">
+        <h2>Create Note</h2>
+        <input type="text" id="title" placeholder="Title">
+        <textarea id="content" placeholder="Content"></textarea>
+        <button onclick="addNote()">Add Note</button>
+
+        <h2>Your Notes</h2>
+        <div id="notes-list"></div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
