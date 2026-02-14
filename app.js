@@ -5,7 +5,7 @@ from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// 🔹 بياناتك
+// 🔹 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyDI1vzdq--ELAVncdphz_iCsfNA8l5lvCU",
   authDomain: "cloud-notes-system.firebaseapp.com",
@@ -79,7 +79,7 @@ addBtn.addEventListener("click", async () => {
   } catch(err) { alert(err.message); }
 });
 
-// 🌟 Realtime Notes for Current User with Edit/Delete
+// 🌟 Realtime Notes + Edit/Delete + Comments
 onAuthStateChanged(auth, user => {
   if(user) {
     noteForm.style.display = "block";
@@ -96,7 +96,7 @@ onAuthStateChanged(auth, user => {
         const data = docSnap.data();
         const noteId = docSnap.id;
 
-        // إنشاء الكارت مع Edit/Delete
+        // إنشاء Note Card مع Edit/Delete و Comments
         const noteCard = document.createElement("div");
         noteCard.className = "note-card";
         noteCard.id = noteId;
@@ -107,9 +107,14 @@ onAuthStateChanged(auth, user => {
             <button class="edit">Edit</button>
             <button class="delete">Delete</button>
           </div>
+          <div class="comments-section">
+            <div class="comments-list"></div>
+            <input type="text" placeholder="Add a comment" class="comment-input">
+            <button class="add-comment">Post</button>
+          </div>
         `;
 
-        // زر التعديل
+        // ✏️ Edit
         noteCard.querySelector(".edit").addEventListener("click", async () => {
           const newContent = prompt("Edit Content:", data.content);
           if(newContent !== null) {
@@ -120,13 +125,46 @@ onAuthStateChanged(auth, user => {
           }
         });
 
-        // زر الحذف
+        // ❌ Delete
         noteCard.querySelector(".delete").addEventListener("click", async () => {
           if(confirm("Are you sure you want to delete this note?")) {
             try {
               await deleteDoc(doc(db, "notes", noteId));
             } catch(err) { console.error(err); }
           }
+        });
+
+        // 💬 Comments Realtime
+        const commentsCol = collection(db, "notes", noteId, "comments");
+        const commentsQuery = query(commentsCol, orderBy("createdAt", "asc"));
+
+        // عرض التعليقات realtime
+        onSnapshot(commentsQuery, snapshot => {
+          const commentsList = noteCard.querySelector(".comments-list");
+          commentsList.innerHTML = "";
+          snapshot.forEach(docSnap => {
+            const c = docSnap.data();
+            const commentEl = document.createElement("div");
+            commentEl.className = "comment";
+            commentEl.textContent = `${c.username}: ${c.content}`;
+            commentsList.appendChild(commentEl);
+          });
+        });
+
+        // إضافة تعليق جديد
+        noteCard.querySelector(".add-comment").addEventListener("click", async () => {
+          const input = noteCard.querySelector(".comment-input");
+          const content = input.value.trim();
+          if(!content) return;
+
+          await addDoc(commentsCol, {
+            userId: auth.currentUser.uid,
+            username: "adnanalariqi73-cpu",
+            content,
+            createdAt: serverTimestamp()
+          });
+
+          input.value = "";
         });
 
         notesList.appendChild(noteCard);

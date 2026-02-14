@@ -30,7 +30,6 @@
     <h2>Your Notes</h2>
     <div id="notes-list"></div>
 </div>
-
 <!-- Template ملاحظة مخفي -->
 <div id="note-template" class="note-card" style="display:none;">
     <div class="note-content">محتوى الملاحظة</div>
@@ -38,32 +37,14 @@
         <button class="edit">Edit</button>
         <button class="delete">Delete</button>
     </div>
-</div>
 
-<style>
-/* 🌟 Card UI */
-.note-card {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    margin: 10px 0;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-.note-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
-}
-.note-title { font-weight: bold; font-size: 1.1em; }
-.note-content { margin: 10px 0; }
-.note-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-button.edit { background-color: #3498db; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-button.delete { background-color: #e74c3c; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
-</style>
+    <!-- قسم التعليقات -->
+    <div class="comments-section">
+        <div class="comments-list"></div>
+        <input type="text" placeholder="Add a comment" class="comment-input">
+        <button class="add-comment">Post</button>
+    </div>
+</div>
 
 </body>
 </html>
