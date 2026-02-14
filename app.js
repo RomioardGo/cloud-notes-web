@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp } 
+import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // 🔹 بياناتك
@@ -43,7 +43,6 @@ window.register = async () => {
   }
 }
 
-
 // 🌟 Login
 window.login = async () => {
   try {
@@ -80,22 +79,57 @@ addBtn.addEventListener("click", async () => {
   } catch(err) { alert(err.message); }
 });
 
-// 🌟 Realtime Notes for Current User
+// 🌟 Realtime Notes for Current User with Edit/Delete
 onAuthStateChanged(auth, user => {
   if(user) {
     noteForm.style.display = "block";
 
-    const q = query(collection(db, "notes"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "notes"), 
+      where("userId", "==", auth.currentUser.uid), 
+      orderBy("createdAt", "desc")
+    );
+
     onSnapshot(q, snapshot => {
       notesList.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        notesList.innerHTML += `
-          <div class="note-card">
-            <h3>${data.title}</h3>
-            <p>${data.content}</p>
+      snapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        const noteId = docSnap.id;
+
+        // إنشاء الكارت مع Edit/Delete
+        const noteCard = document.createElement("div");
+        noteCard.className = "note-card";
+        noteCard.id = noteId;
+        noteCard.innerHTML = `
+          <h3>${data.title}</h3>
+          <p class="note-content">${data.content}</p>
+          <div class="note-actions">
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
           </div>
         `;
+
+        // زر التعديل
+        noteCard.querySelector(".edit").addEventListener("click", async () => {
+          const newContent = prompt("Edit Content:", data.content);
+          if(newContent !== null) {
+            try {
+              await updateDoc(doc(db, "notes", noteId), { content: newContent });
+              noteCard.querySelector(".note-content").textContent = newContent;
+            } catch(err) { console.error(err); }
+          }
+        });
+
+        // زر الحذف
+        noteCard.querySelector(".delete").addEventListener("click", async () => {
+          if(confirm("Are you sure you want to delete this note?")) {
+            try {
+              await deleteDoc(doc(db, "notes", noteId));
+            } catch(err) { console.error(err); }
+          }
+        });
+
+        notesList.appendChild(noteCard);
       });
     });
 

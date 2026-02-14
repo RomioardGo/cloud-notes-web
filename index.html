@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cloud Notes</title>
 <link rel="stylesheet" href="style.css">
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
 <script type="module" src="app.js"></script>
 </head>
 <body>
@@ -23,9 +20,8 @@
     <button onclick="login()">Login</button>
     <button onclick="logout()">Logout</button>
 </div>
-
 <!-- Notes Section -->
-<div id="notes-section" style="display:none;">
+<div id="notes-section" style="display:block;"> <!-- خليته ظاهر للتجربة -->
     <h2>Create Note</h2>
     <input type="text" id="note-title" placeholder="Title">
     <textarea id="note-content" placeholder="Content"></textarea>
@@ -34,6 +30,40 @@
     <h2>Your Notes</h2>
     <div id="notes-list"></div>
 </div>
+
+<!-- Template ملاحظة مخفي -->
+<div id="note-template" class="note-card" style="display:none;">
+    <div class="note-content">محتوى الملاحظة</div>
+    <div class="note-actions">
+        <button class="edit">Edit</button>
+        <button class="delete">Delete</button>
+    </div>
+</div>
+
+<style>
+/* 🌟 Card UI */
+.note-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+}
+.note-title { font-weight: bold; font-size: 1.1em; }
+.note-content { margin: 10px 0; }
+.note-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+button.edit { background-color: #3498db; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+button.delete { background-color: #e74c3c; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+</style>
 
 </body>
 </html>

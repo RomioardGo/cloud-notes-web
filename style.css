@@ -92,3 +92,28 @@ button:hover {
         font-size: 0.9rem;
     }
 }
+.note-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.note-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+}
+.note-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+}
+button.delete { background-color: #e74c3c; color: #fff; }
+button.edit { background-color: #3498db; color: #fff; }
